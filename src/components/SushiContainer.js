@@ -1,28 +1,28 @@
-import React, {useState } from "react";
+import React from "react";
 import MoreButton from "./MoreButton";
 import Sushi from "./Sushi";
 
-function SushiContainer({allDaSushi}) {
+function SushiContainer({handleMoreButton, indexStart, indexEnd, allDaSushi, handleEatSushi, plateFull}) {
 
-  const [indexStart, setIndexStart] = useState(0)
-  const [indexEnd, setIndexEnd] = useState(4)
 
-  const handleMoreButton = () => {
-    if (indexStart < 97) {
-    setIndexStart(indexEnd)
-    console.log(indexEnd)
-    setIndexEnd(indexEnd+4)
-    console.log(indexEnd+4)
-    }
-    else if (indexStart > 97) {
-      setIndexStart(0)
-      setIndexEnd(4);
-    }
-  }
+  const fourAtATime = allDaSushi.slice(indexStart, indexEnd);
+  
+  const renderSushi = fourAtATime.map((sushi) => {
+
+      if (sushi.plateStatus === undefined) {
+        sushi.plateStatus = plateFull;
+      }
+
+       return (
+        <div key={sushi.id} name={sushi.name}>
+          <Sushi sushi={sushi} handleEatSushi={handleEatSushi}/>
+        </div>
+       )
+  })
 
   return (
     <div className="belt">
-      <Sushi allDaSushi={allDaSushi} indexStart={indexStart} indexEnd={indexEnd}/>
+      {renderSushi}
       <MoreButton handleMoreButton={handleMoreButton}/>
     </div>
   );
